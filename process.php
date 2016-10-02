@@ -2,8 +2,8 @@
 
     class User
     {
-        // logout automatically after 300 second
-        const time_out = 1000;
+        // logout automatically after 300 second (5 mins)
+        const time_out = 300;
 
         // Guest user
         const GUEST_USER = "GUEST";
