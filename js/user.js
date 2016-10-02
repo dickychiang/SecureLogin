@@ -50,13 +50,17 @@ User = {
 			document.getElementById('error').innerHTML = "You need to fill in a username or password";
 			return false;
 		}
-		else
+
+		if(password.length < 8)
 		{
-			form["sha1"].value = Sha1.hash(form["password"].value);
-			form["password"].value = this.randomString(16);
-			form.submit();
-			return true;
+			document.getElementById('error').innerHTML = "Your password is easy too guess, please try to put it longer";
+			return false;
 		}
+
+		form["sha1"].value = Sha1.hash(form["password"].value);
+		form["password"].value = this.randomString(16);
+		form.submit();
+		return true;
 	},
 
 	processLogout: function()
