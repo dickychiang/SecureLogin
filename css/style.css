@@ -1,6 +1,6 @@
 #main {
     width:400px;
-    position: fixed;
+    position: absolute;;
     left: 50%;
     margin-left: -200px;
     font-family:raleway
@@ -42,7 +42,7 @@ input[type=text],input[type=password] {
     font-size:16px;
     font-family:raleway
 }
-input[type=submit] {
+button, input[type=button], input[type=submit] {
     width:100%;
     background-color:#FFBC00;
     color:#fff;
@@ -66,7 +66,6 @@ input[type=submit] {
     border:dashed 1px gray
 }
 a {
-    text-decoration:none;
     color:#6495ed
 }
 i {
