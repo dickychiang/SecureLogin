@@ -17,6 +17,41 @@ User = {
 		return string;
 	},
 
+	validPasswordCases: function(password)
+	{
+		var checknum = false;
+		var checkupper = false;
+		var checklower = false;
+
+		var s = '';
+		for(var i = 0; i < password.length; i++)
+		{
+			s = password.charAt(i);
+			if(!isNaN(s * 1))
+			{
+				checknum = true;
+			}
+			else
+			{
+				if(s == s.toUpperCase() )
+				{
+					checkupper = true;
+				}
+				if(s == s.toLowerCase())
+				{
+					checklower = true;
+				}
+			}
+		}
+
+		if(!checknum || !checkupper || !checklower)
+		{
+			return false;
+		}
+
+		return true;
+	},
+
 	processLogin: function()
 	{
 		var valid = true;
@@ -40,7 +75,6 @@ User = {
 
 	processRegistration: function()
 	{
-		var valid = true;
 		var form = document.getElementById('registration');
 		var username = form["username"].value;
 		var password = form["password"].value;
@@ -51,9 +85,23 @@ User = {
 			return false;
 		}
 
+		if(password == username)
+		{
+			document.getElementById('error').innerHTML = "Your password is the same as your username, please change it";
+			return false;
+		}
+
 		if(password.length < 8)
 		{
-			document.getElementById('error').innerHTML = "Your password is easy too guess, please try to put it longer";
+			document.getElementById('error').innerHTML = "Your password is easy too guess, please try to put it longer (at least 8 characters)";
+			return false;
+		}
+
+		var validcases = this.validPasswordCases(password);
+
+		if(!validcases)
+		{
+			document.getElementById('error').innerHTML = "You password at least contains one numbric, one lowercase and one uppercase";
 			return false;
 		}
 
@@ -80,13 +128,25 @@ User = {
 			document.getElementById('error').innerHTML = "You need to fill in a username or password";
 			return false;
 		}
-		else
+
+		if(password.length < 8)
 		{
-			form["sha1"].value = Sha1.hash(form["password"].value);
-			form["password"].value = this.randomString(16);
-			form.submit();
-			return true;
+			document.getElementById('error').innerHTML = "Your password is easy too guess, please try to put it longer (at least 8 characters)";
+			return false;
 		}
+
+		var validcases = this.validPasswordCases(password);
+
+		if(!validcases)
+		{
+			document.getElementById('error').innerHTML = "You password at least contain one numbric, one lowercase and one uppercase";
+			return false;
+		}
+
+		form["sha1"].value = Sha1.hash(form["password"].value);
+		form["password"].value = this.randomString(16);
+		form.submit();
+		return true;
 	},
 
 	prev : "",
@@ -159,21 +219,42 @@ User = {
 			update.id = "admin_update";
 			update.type = "button";
 			update.value = "Update";
+			update.setAttribute("stye","background-color:#837857;");
 			update.onclick = function() {
 				var form = document.getElementById('admin_update_user');
+				var password = form["password"].value;
+				var role = form["role"].value
 
-				if(form["password"].value != "")
-				{
-					form["sha1"].value = Sha1.hash(form["password"].value);
-					form["password"].value = User.randomString(16);
-					form.submit();
-				}
-				else
+				if(password === "" )
 				{
 					form["password"].value = "";
 					form.submit();
 				}
+				else
+				{
+
+					if(password.length < 8)
+					{
+						document.getElementById('error').innerHTML = "Your password is easy too guess, please try to put it longer (at least 8 characters)";
+						return false;
+					}
+
+					var validcases = User.validPasswordCases(password);
+
+					if(!validcases)
+					{
+						document.getElementById('error').innerHTML = "You password at least contain one numbric, one lowercase and one uppercase";
+						return false;
+					}
+
+					form["sha1"].value = Sha1.hash(form["password"].value);
+					form["password"].value = User.randomString(16);
+					form.submit();
+				}
 			}
+
+			var error = document.createElement("span");
+			error.setAttribute("id", "error");
 
 			form.appendChild(op);
 			form.appendChild(sha1);
@@ -186,6 +267,7 @@ User = {
 			form.appendChild(role_label_admin);
 			form.appendChild(role_admin);
 			form.appendChild(update);
+			form.appendChild(error);
 
 			document.getElementsByClassName("output")[targetElement['id']].appendChild(form);
 

@@ -417,9 +417,9 @@
         function update_info_by_admin()
         {
             //var_dump($_POST);
-            $target_user = $_POST["username"];
+            $target_user = $_POST["username"] ;
             $sha1 = $_POST["sha1"];
-            $new_role = $_POST["role"];
+            $new_role = ($_POST["role"] !== "") ? $_POST["role"] : "" ;
 
             // use regular expression to valide a passowrd hashed by sha1
             if($sha1 != "" && preg_match(User::sha1regexp, $sha1) == 0)

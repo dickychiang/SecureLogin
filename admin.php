@@ -46,9 +46,15 @@ $USER = new User();
         </h2>
 <?php } ?>
 
+<?php if(!$USER->authenticated && $USER->role == "user" || $USER->role == "user") { ?>
+            <h2>
+                You're been logged out automatically. Please <a href="main.php">re-log in</a> your accout.
+            </h2>
+<?php } ?>
+
 <?php if(!$USER->authenticated) { ?>
             <h2>
-                You're not allowed to visit this page. Try to <a href="main.php">re-log in</a> or <a href="register.php">register a new account ?</a>
+                You're not allowed to visit this page. Try to <a href="main.php">re-log in</a> or <a href="register.php">register a new account.</a>
             </h2>
 <?php } ?>
         </div>
