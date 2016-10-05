@@ -113,6 +113,13 @@
                 return false;
             }
 
+            // validate username
+            if(!$this->valide_username($username))
+            {
+                $this->error = "user name did not pass validation.";
+                return false;
+            }
+
             // get user's password and token from database
             $db_password = $this->token_hash_password($username, $sha1, $this->get_user_token($username));
 
@@ -153,6 +160,13 @@
             if(preg_match(User::sha1regexp, $sha1) == 0)
             {
                 $this->error = "The password did not pass validation.";
+                return false;
+            }
+
+            // validate username
+            if(!$this->valide_username($username))
+            {
+                $this->error = "user name did not pass validation.";
                 return false;
             }
 
@@ -465,6 +479,19 @@
             //echo "call resetSession <br />";
             $_SESSION["username"] = User::GUEST_USER;
             $_SESSION["token"] = -1;
+        }
+
+        function valide_username($username)
+        {
+            $valid = false;
+            $inject = array("'", "\\", ";");
+            $replace = array("", "", "");
+
+            $s = trim(str_replace($inject, $replace, $username));
+
+            $valid = ($s != "" && $s == $username);
+
+            return $valid;
         }
 
         /**
