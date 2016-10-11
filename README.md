@@ -1,5 +1,5 @@
 # site
-Secure Programming - Assignment 2 
+A secure log-in system.
 
 ### Starting server
 `php -S localhost:8000`
